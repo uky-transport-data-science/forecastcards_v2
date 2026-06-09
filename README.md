@@ -26,6 +26,10 @@ data that conforms to the forecast cards data schema and consists of four main c
  3. Project: to validate single projects (much of the same functionality as Cardset)
  4. Schema: to manage and validate the data schemas
 
+## What's in Version 2
+
+In 2026, we updated this to measure induced travel.  We changed the data scheme to include project details before and after the project opens, including number of lanes and more. 
+
 ### Basic Usage
 
 **Validate Single Project**
