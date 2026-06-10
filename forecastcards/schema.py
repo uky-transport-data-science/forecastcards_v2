@@ -35,9 +35,7 @@ class Card_schema:
         if type(self.schema_dir) is dict:
             self.schema_locs = self.schema_locs_from_github()
         else:
-            "Local schemas not implemented"
-            ### TODO: implement local schemas_locs
-            raise()
+            raise NotImplementedError("Local schemas not implemented")
 
         if validate:
             self.schema_dict = self.validate_schemas(schema_locs = self.schema_locs, schema_parts=self.schema_parts)

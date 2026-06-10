@@ -94,12 +94,12 @@ class Project:
             elif cs.find('github')>=0:
                 cs = forecastcards.github_url_to_dict(cs)
 
-            cs = forecastcards.Cardset(data_loc=cs_loc,validate=False)
+            cs = forecastcards.Cardset(data_loc=cs,validate=False)
             if self.project_id in cs.projects:
-                cs_with_project_id.append(cs_loc_orig)
-
+                cs_with_project_id.append(cs)
+    
         if cs_with_project_id:
-            print("Duplicate Project ID found in following cardsets:","\n".join(cs_with_project_id))
+            print("Duplicate Project ID found in following cardsets:", "\n".join(str(cs) for cs in cs_with_project_id))
             return False
         else:
             return True
@@ -125,7 +125,7 @@ class Project:
 
     def get_project_id_github(self, project_location):
         if not isinstance(project_location, dict):
-            project_location = forecastcards.github_url_to_dict(cs_loc)
+            project_location = forecastcards.github_url_to_dict(project_location)
         #print(project_location)
         repo_loc = forecastcards.api_github_url(project_location['username'],project_location['repository'],project_location['branch'])
         repo_raw = forecastcards.raw_github_url(project_location['username'],project_location['repository'],project_location['branch'])
@@ -148,7 +148,7 @@ class Project:
 
     def add_file_locations_github(self):
             if not isinstance(self.project_location, dict):
-                project_location = forecastcards.github_url_to_dict(cs_loc)
+                project_location = forecastcards.github_url_to_dict(self.project_location)
 
             repo_loc = forecastcards.api_github_url(self.project_location['username'],self.project_location['repository'],self.project_location['branch'])
             repo_raw = forecastcards.raw_github_url(self.project_location['username'],self.project_location['repository'],self.project_location['branch'])
@@ -216,13 +216,13 @@ class Project:
                     print ("Validation Error:", card)
                     fail_reports.append(report)
                                 # check that start time is before end time
-                if card_type in ['forecast','observation']:
+                if card_type in ['forecast','observations']:
                     df=pd.read_csv(card,
                                    dtype={'obs_value':float},
                                    usecols=["start_time", "end_time"])
                     df['end_time']=df['end_time'].apply(lambda x: '23:59:59' if x in ['24:00:00','24:00'] else x)
-                    df['start_time']= pd.to_datetime(df['start_time'], infer_datetime_format=True)
-                    df['end_time']= pd.to_datetime(df['end_time'], infer_datetime_format=True)
+                    df['start_time']= pd.to_datetime(df['start_time'])
+                    df['end_time']= pd.to_datetime(df['end_time'])
                     df['invalid']=df['start_time']>=df['end_time']
                     if df['invalid'].sum()>0:
                         valid = False

@@ -53,7 +53,6 @@ class Dataset:
             [pd.read_csv(
                 f,
                 parse_dates=['year_open_planned','year_horizon','date_open_actual'],
-                infer_datetime_format=True,
                 ) for f in card_locs_by_type["project"]
             ],
             ignore_index=True,
@@ -63,7 +62,6 @@ class Dataset:
             [pd.read_csv(
                 f,
                 parse_dates=['forecast_creation_date','scenario_date'],
-                infer_datetime_format=True,
                 ) for f in card_locs_by_type["scenario"]
             ],
             ignore_index=True,
@@ -128,7 +126,7 @@ class Dataset:
         if not no_na_vars:
             no_na_vars = self.no_na_vars
 
-        all_df[recode_na_vars].fillna('missing')
+        all_df[recode_na_vars] = all_df[recode_na_vars].fillna('missing')
 
         usable_df = all_df.dropna(subset=no_na_vars)
 
@@ -139,7 +137,7 @@ class Dataset:
     def create_daily_volumes(self,row):
 
         ##TODO this is a simplification. Should be doing more robust checks.
-        if (not row['start_time']) or (not row['end_time']):
+        if pd.isna(row['start_time']) or pd.isna(row['end_time']):
             return row['forecast_value']
 
         adt = forecastcards.convert_vol_to_daily(row['forecast_value'], row['start_time'], row['end_time'])
@@ -157,7 +155,7 @@ class Dataset:
         #print(df[['start_time','end_time','forecast_value','daily_forecast_value']])
         bins = [df['daily_forecast_value'].min(), breakpoint, breakpoint+df['daily_forecast_value'].max()]
         labels = ["small_project","large_project"]
-        df['project_size'] = pd.cut(df['forecast_value'], bins=bins, labels=labels)
+        df['project_size'] = pd.cut(df['daily_forecast_value'], bins=bins, labels=labels)
 
         return df
 

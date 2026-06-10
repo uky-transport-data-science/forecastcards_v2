@@ -66,12 +66,12 @@ class Cardset:
         # add initial projects
         self.add_projects(data_loc, select_projects=select_projects, exclude_projects=exclude_projects, validate=validate)
         if self.invalid_projects:
-            print("PROJECTS FAILED VALIDATION:"+",".join(self.invalid_projects)+"/n")
+            print("PROJECTS FAILED VALIDATION:"+",".join(self.invalid_projects)+"\n")
             print(self.failed_reports)
     def validate_project(self, p_card_locs, schema_locs={}, validity_requires = []):
 
         if not schema_locs:
-            schema_locs = self.schemas_locs
+            schema_locs = self.schema_locs
 
         if not validity_requires:
             validity_requires = self.validity_requires
@@ -93,18 +93,18 @@ class Cardset:
                     fail_reports.append(report)
 
                 # check that start time is before end time
-                if card_type in ['forecast','observation']:
-                    df=pd.read_csv(card,
-                                   dtype={'obs_value':float},
-                                   usecols=["start_time", "end_time"])
-                    df['end_time']=df['end_time'].apply(lambda x: '23:59:59' if x in ['24:00:00','24:00'] else x)
-                    df['start_time']= pd.to_datetime(df['start_time'], infer_datetime_format=True)
-                    df['end_time']= pd.to_datetime(df['end_time'], infer_datetime_format=True)
-                    df['invalid']=df['start_time']>=df['end_time']
-                    if df['invalid'].sum()>0:
-                        valid = False
-                        report = card+ " - Start time isn't before end time."+str(df[df['invalid'] == True])
-                        fail_reports.append(report)
+                if card_type in ['forecast','observations']:
+                    df = pd.read_csv(card, dtype={'obs_value': float})
+                    if 'start_time' in df.columns and 'end_time' in df.columns:
+                        df = df[["start_time", "end_time"]]
+                        df['end_time']=df['end_time'].apply(lambda x: '23:59:59' if x in ['24:00:00','24:00'] else x)
+                        df['start_time'] = pd.to_datetime(df['start_time'])
+                        df['end_time']   = pd.to_datetime(df['end_time'])
+                        df['invalid']=df['start_time']>=df['end_time']
+                        if df['invalid'].sum()>0:
+                            valid = False
+                            report = card+ " - Start time isn't before end time."+str(df[df['invalid'] == True])
+                            fail_reports.append(report)
 
         return valid, fail_reports
 

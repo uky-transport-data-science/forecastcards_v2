@@ -31,7 +31,7 @@ def github_url_to_dict(gh_url):
     gh_dict['repository'] = g[2]
     gh_dict['branch'] = g[4]
     gh_dict['subdir'] = ''
-    if len(g)>4:
+    if len(g)>5:
         gh_dict['subdir']='/'.join(g[5:])
     return gh_dict
 
@@ -73,14 +73,14 @@ def convert_vol_to_daily(value, start_time, end_time, distribution=BASE_HOURLY_T
     end_time_dt   = pd.to_datetime(end_time)
 
     v_dist_df = pd.DataFrame(distribution,columns=['start_hour','volume'])
-    v_dist_df['start_hour']= pd.to_datetime(v_dist_df['start_hour'], infer_datetime_format=True)
+    v_dist_df['start_hour'] = pd.to_datetime(v_dist_df['start_hour'])
     v_dist_df = v_dist_df.set_index('start_hour')
 
     # convert from raw volumes to a distribution
     v_dist_df = v_dist_df['volume']/v_dist_df['volume'].sum()
 
     # convert from hourly to by the second and then interpolate
-    dist_second_na = v_dist_df.resample('S').mean()/float(3600)
+    dist_second_na = v_dist_df.resample('s').mean()/float(3600)
     dist_second = dist_second_na.interpolate(method='time')
 
     # return daily approximation based on distribution

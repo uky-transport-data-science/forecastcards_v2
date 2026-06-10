@@ -1,4 +1,4 @@
-pandas==0.22
+pandas
 requests
 goodtables
 tableschema
