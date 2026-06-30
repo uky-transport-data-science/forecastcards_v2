@@ -16,65 +16,45 @@
 			"name": "poi_id",
 			"type": "string",
 			"format": "default",
-			"title": "Point of interest ID",
+			"title": "Point of Interest ID",
 			"constraints": {
 				"required": true
 			}
 		},
 		{
-			"name": "forecast_match_id",
-			"type": "string",
-			"format": "default",
-			"title": "Forecast POI ID"
-		},
-		{
-			"name": "equip_id",
-			"type": "string",
-			"format": "default",
-			"title": "Equipment ID"
-		},
-		{
-			"name": "equip_type",
-			"type": "string",
-			"format": "default",
-			"title": "Equipment Type",
-			"constraints": {
-				"required": true,
-				"enum": ["hand", "tube", "loop-detector", "radar", "video detection", "video replay", "other", "unknown"]
-			}
-		},
-		{
-			"name": "obs_date",
+			"name": "observation_date",
 			"type": "date",
 			"format": "default",
-			"title": "Observation date",
+			"title": "Observation Date",
 			"constraints": {
 				"required": true
 			}
 		},
 		{
-			"name": "time_start",
+			"name": "start_time",
 			"type": "time",
 			"format": "default",
-			"title": "Observation start time",
+			"title": "Start Time",
+			"description": "Start time for observation variable",
 			"constraints": {
 				"required": true
 			}
 		},
 		{
-			"name": "time_end",
+			"name": "end_time",
 			"type": "time",
 			"format": "default",
-			"title": "Observation end time",
+			"title": "End Time",
+			"description": "End time for observation variable",
 			"constraints": {
 				"required": true
 			}
 		},
 		{
-			"name": "obs_variable",
+			"name": "observation_variable",
 			"type": "string",
 			"format": "default",
-			"title": "Observation variable",
+			"title": "Observation Variable",
 			"description": "i.e. volume, ridership, etc.",
 			"constraints": {
 				"required": true,
@@ -82,14 +62,21 @@
 			}
 		},
 		{
-			"name": "obs_value",
+			"name": "observation_value",
 			"type": "number",
 			"format": "default",
-			"title": "Observation value",
-			"description": "Value of the observation variable between start time and end time for observation date.",
+			"title": "Observation Value",
+			"description": "Value of the observation variable between start time and end time on the observation date.",
 			"constraints": {
 				"required": true
 			}
+		},
+		{
+			"name": "observation_unit",
+			"type": "string",
+			"format": "default",
+			"title": "Observation Unit",
+			"description": "Unit of the observation value, e.g. AADT."
 		}
 	]
 }

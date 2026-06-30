@@ -6,18 +6,22 @@
 			"type": "string",
 			"format": "default",
 			"title": "Point of Interest ID",
-			"description": "Unique identifier for a point of interest. Note that a point of interest should reference a SINGLE direction on a facility.  If you have more than one direction, you can create two separate POIs.",
+			"description": "Unique identifier for a point of interest. Note that a point of interest should reference a SINGLE direction on a facility. If you have more than one direction, you can create two separate POIs.",
 			"constraints": {
 				"required": true,
 				"unique": true
 			}
 		},
 		{
-			"name": "poi_short_name",
+			"name": "before_or_after",
 			"type": "string",
 			"format": "default",
-			"description": "Short description for a point of interest.",
-			"title": "Point of Interest Short Name"
+			"title": "Before or After",
+			"description": "Whether this POI record describes conditions before or after the project.",
+			"constraints": {
+				"required": true,
+				"enum": ["before", "after"]
+			}
 		},
 		{
 			"name": "facility_name",
@@ -30,80 +34,90 @@
 			}
 		},
 		{
-			"name": "start",
-			"type": "string",
+			"name": "segment_length_miles",
+			"type": "number",
 			"format": "default",
-			"title": "Start of POI",
-			"description": "Starting point for the point of interest. Could be a lat/long, mile-marker, intersection, landmark, or a node number."
+			"title": "Segment Length (miles)",
+			"description": "Length of the POI segment, in miles."
 		},
 		{
-			"name": "end",
-			"type": "string",
+			"name": "speed_limit_mph",
+			"type": "number",
 			"format": "default",
-			"title": "End of POI",
-			"description": "Ending point for the point of interest. Could be a lat/long, mile-marker, intersection, landmark, or a node number."
+			"title": "Speed Limit (mph)",
+			"description": "Posted speed limit at the POI, in miles per hour."
 		},
 		{
-			"name": "area_type",
-			"type": "string",
+			"name": "lane_width",
+			"type": "number",
 			"format": "default",
-			"title": "Area Type",
-			"description": "Geographic area type of point of interest.",
-			"constraints": {
-				"required": true,
-				"enum": ["rural", "suburban", "exurban", "urban", "other", "unknown"]
-			}
+			"title": "Lane Width",
+			"description": "Width of travel lanes at the POI, in feet."
 		},
 		{
-			"name": "facility_type",
-			"type": "string",
+			"name": "signals_per_mile",
+			"type": "number",
 			"format": "default",
-			"title": "Facility type",
-			"constraints": {
-				"required": true
-			}
+			"title": "Signals per Mile",
+			"description": "Number of traffic signals per mile along the POI segment."
+		},
+		{
+			"name": "stop_signs_per_mile",
+			"type": "number",
+			"format": "default",
+			"title": "Stop Signs per Mile",
+			"description": "Number of stop signs per mile along the POI segment."
+		},
+		{
+			"name": "through_lanes",
+			"type": "integer",
+			"format": "default",
+			"title": "Through Lanes",
+			"description": "Number of through lanes at the POI."
+		},
+		{
+			"name": "left_turn_lanes",
+			"type": "integer",
+			"format": "default",
+			"title": "Left Turn Lanes",
+			"description": "Number of left turn lanes at the POI."
+		},
+		{
+			"name": "right_turn_lanes",
+			"type": "integer",
+			"format": "default",
+			"title": "Right Turn Lanes",
+			"description": "Number of right turn lanes at the POI."
+		},
+		{
+			"name": "express_hov_hot_lanes",
+			"type": "integer",
+			"format": "default",
+			"title": "Express/HOV/HOT Lanes",
+			"description": "Whether an express, HOV, or HOT lane is present at the POI (1 = yes, 0 = no)."
+		},
+		{
+			"name": "shoulder_width",
+			"type": "number",
+			"format": "default",
+			"title": "Shoulder Width",
+			"description": "Width of the shoulder at the POI, in feet."
 		},
 		{
 			"name": "functional_class",
 			"type": "string",
 			"format": "default",
-			"title": "Functional classification",
+			"title": "Functional Classification",
 			"constraints": {
-				"enum": ["Freeway",
-					"Principal Arterial",
-					"Minor Arterial",
-					"Major Collector",
-					"Minor Collector",
-					"Local",
-					"Ramp"
+				"enum": ["freeway",
+					"principal arterial",
+					"minor arterial",
+					"major collector",
+					"minor collector",
+					"local",
+					"ramp"
 				]
 			}
-		},
-		{
-			"name": "features",
-			"type": "array",
-			"format": "default",
-			"title": "Features of the facility ",
-			"description": "Such as HOV, toll, etc."
-		},
-		{
-			"name": "state",
-			"type": "string",
-			"format": "default",
-			"title": "State that the POI lies in."
-		},
-		{
-			"name": "jurisdiction",
-			"type": "string",
-			"format": "default",
-			"title": "Maintainer/owner/operator ",
-			"description": "Who is in charge of the facility?"
-		},
-		{
-			"name": "poi_description",
-			"type": "string",
-			"format": "default",
-			"title": "Longer description of the POI"
 		}
 	]
 }

@@ -5,13 +5,13 @@ from goodtables import validate
 import forecastcards
 
 class Dataset:
-    default_recode_na_vars   = ['forecast_system_type', 'area_type', 'forecaster_type', 'state', 'agency', 'functional_class','facility_type','project_type']
-    default_no_na_vars       = ['scenario_date','forecast_creation_date','forecast_value','obs_value']
+    default_recode_na_vars   = ['area_type', 'state', 'functional_class', 'project_type']
+    default_no_na_vars       = ['date_open_planned','forecast_value']
 
     default_required_vars    = default_recode_na_vars + default_no_na_vars
 
-    default_categorical_cols = ['project_size','creation_decade','scenario_decade','functional_class','forecast_system_type','project_type','agency','forecaster_type','area_type','facility_type','state']
-    default_no_scale_cols    = ['scenario_date','forecast_creation_date','forecast_value','obs_value']
+    default_categorical_cols = ['project_size','project_decade','functional_class','project_type','area_type','state']
+    default_no_scale_cols    = ['date_open_planned','forecast_value']
 
     def __init__(
                  self,
@@ -44,25 +44,26 @@ class Dataset:
     def combine_data(self, card_locs_by_type, file_to_project_id):
         '''
         Combine tables by card type and merge tables on keys.
+
+        project, poi, observations, and forecast cards link together as:
+            poi   <--(project_id, poi_id)-- observations
+            poi   <--(project_id, poi_id)-- forecast
+            project <--(project_id)-- poi/observations/forecast (via the
+                project_id assigned to each file in file_to_project_id)
+
+        Note: forecast and observations are not merged with each other
+        directly, since there is no shared key between a specific forecast
+        record and a specific observation record in the current schema
+        (only the poi they both describe).
         '''
         print("Combining data")
-        ## TODO need to add project_id to each table.
         #Combine tables by type
 
         project_df = pd.concat(
             [pd.read_csv(
                 f,
-                parse_dates=['year_open_planned','year_horizon','date_open_actual'],
+                parse_dates=['date_open_planned','date_horizon','date_open_actual'],
                 ) for f in card_locs_by_type["project"]
-            ],
-            ignore_index=True,
-        )
-
-        scenario_df = pd.concat(
-            [pd.read_csv(
-                f,
-                parse_dates=['forecast_creation_date','scenario_date'],
-                ) for f in card_locs_by_type["scenario"]
             ],
             ignore_index=True,
         )
@@ -75,7 +76,7 @@ class Dataset:
         observations_df = pd.concat(
             [pd.read_csv(
                 f,
-                dtype={'obs_value':float},
+                dtype={'observation_value':float},
                 ).assign(project_id=file_to_project_id[f]) for f in card_locs_by_type["observations"]
             ],
             ignore_index=True,
@@ -92,24 +93,19 @@ class Dataset:
 
         #Combine tables by type
 
-        # scenario<---project
-        scenario_proj_df    = scenario_df.merge(project_df, on='project_id', how='left')
-        #print("scenario_proj_df shape:",scenario_proj_df.shape )
-
-
         # observations <---poi
-        observations_poi_df = observations_df.merge(poi_df, on=['project_id','poi_id'], how='left')
-        #print("observations_poi_df shape:",observations_poi_df.shape )
-        #print(observations_poi_df[['project_id','poi_id','obs_id','forecast_match_id']])
-        # forecasts <---[observations+poi]<----[scenario+project]
+        self.observations_df = observations_df.merge(poi_df, on=['project_id','poi_id'], how='left')
+        #print("observations_df shape:",self.observations_df.shape )
+
+        # forecast <---poi<----project
         all_df = forecast_df.merge(
-            observations_poi_df,
-            on=['project_id','forecast_match_id'],
+            poi_df,
+            on=['project_id','poi_id'],
             how='left').merge(
-                scenario_proj_df,
-                on=['project_id','run_id'],
+                project_df,
+                on='project_id',
                 how='left')
-        #print(all_df[['project_id','run_id','forecast_match_id']])
+        #print(all_df[['project_id','poi_id']])
 
         return all_df
 
@@ -145,9 +141,8 @@ class Dataset:
         return adt
 
     def create_default_categorical_vars(self, df):
-        ## categorical decades variable
-        df['creation_decade'] = (df['forecast_creation_date'].apply(lambda x: x.year//10*10)).astype('category')
-        df['scenario_decade'] = (df['scenario_date'].apply(lambda x: x.year//10*10)).astype('category')
+        ## categorical decade variable, based on the project's planned opening date
+        df['project_decade'] = (df['date_open_planned'].apply(lambda x: x.year//10*10)).astype('category')
 
         ## large projects dummy variable
         breakpoint = 30000

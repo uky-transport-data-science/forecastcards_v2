@@ -20,7 +20,6 @@ class Project:
 
     github_master_schema_loc = {
                 'poi'         : "https://raw.github.com/e-lo/forecast-cards/master/spec/en/poi-schema.json",
-                "scenario"    : "https://raw.github.com/e-lo/forecast-cards/master/spec/en/scenario-schema.json",
                 "project"     : "https://raw.github.com/e-lo/forecast-cards/master/spec/en/project-schema.json",
                 "observations": "https://raw.github.com/e-lo/forecast-cards/master/spec/en/observations-schema.json",
                 "forecast"    : "https://raw.github.com/e-lo/forecast-cards/master/spec/en/forecast-schema.json",
@@ -46,11 +45,10 @@ class Project:
 
 
         self.valid             = False
-        self.validity_requires = ['project','poi','observations','scenario','forecast']
+        self.validity_requires = ['project','poi','observations','forecast']
         self.fail_reports      = []
 
         self.card_locs_by_type = {'poi'         : [],
-                                  'scenario'    : [],
                                   'observations': [],
                                   'forecast'    : [],
                                   'project'     : []}
@@ -165,9 +163,6 @@ class Project:
                 if path_list[-1][0:7].lower() == "project":
                     self.card_locs_by_type['project'].append(urljoin(repo_raw,file['path']))
                     #print("adding project:",file['path'])
-                if path_list[-1][0:8].lower()=="scenario":
-                    self.card_locs_by_type['scenario'].append(urljoin(repo_raw,file['path']))
-                    #print("adding scenario:",file['path'])
                 if path_list[-1][0:8].lower()=="forecast":
                     self.card_locs_by_type['forecast'].append(urljoin(repo_raw,file['path']))
                     #print("adding forecast:",file['path'])
@@ -180,7 +175,6 @@ class Project:
 
     def add_file_locations_local(self):
         self.card_locs_by_type['poi']= glob.glob(os.path.join(self.project_location,'poi*.csv'),recursive=True)
-        self.card_locs_by_type['scenario']= glob.glob(os.path.join(self.project_location,'scenario*.csv'),recursive=True)
         self.card_locs_by_type['observations']= glob.glob(os.path.join(self.project_location,'**/observations*.csv'),recursive=True)
         self.card_locs_by_type['forecast']= glob.glob(os.path.join(self.project_location,'**/forecast*.csv'),recursive=True)
         self.card_locs_by_type['project']= glob.glob(os.path.join(self.project_location,'project*.csv'),recursive=True)
@@ -218,7 +212,7 @@ class Project:
                                 # check that start time is before end time
                 if card_type in ['forecast','observations']:
                     df=pd.read_csv(card,
-                                   dtype={'obs_value':float},
+                                   dtype={'observation_value':float},
                                    usecols=["start_time", "end_time"])
                     df['end_time']=df['end_time'].apply(lambda x: '23:59:59' if x in ['24:00:00','24:00'] else x)
                     df['start_time']= pd.to_datetime(df['start_time'])

@@ -1,6 +1,6 @@
 {
     "missingValues": [""],
-    "primaryKey":["project_id"],
+    "primaryKey": ["project_id"],
 	"fields": [{
 			"name": "project_id",
 			"type": "string",
@@ -13,13 +13,24 @@
 			}
 		},
 		{
-			"name": "agency",
+			"name": "state",
 			"type": "string",
 			"format": "default",
-			"title": "Responsible Agency",
-			"description": "Agency responsible for project. Will be assumed as unknown if left blank.",
+			"title": "State",
+			"description": "State in which the project is located.",
 			"constraints": {
 				"required": true
+			}
+		},
+		{
+			"name": "project_type",
+			"type": "string",
+			"format": "default",
+			"title": "Project Type",
+			"description": "Typology of the project",
+			"constraints": {
+				"required": true,
+				"enum": ["hov", "road-capacity-expansion", "transit-priority", "road-diet", "bike-facility", "new-roadway", "land-use", "other"]
 			}
 		},
 		{
@@ -29,28 +40,18 @@
 			"title": "Project Description"
 		},
 		{
-			"name": "project_type",
-			"type": "string",
+			"name": "date_open_planned",
+			"type": "date",
 			"format": "default",
-			"title": "Project Type",
-			"description": "Typology  of the project",
-			"constraints": {
-				"enum": ["hov", "road-capacity-expansion", "transit-priority", "road-diet", "bike-facility", "new-roadway", "land-use", "other"]
-			}
-		},
-		{
-			"name": "year_open_planned",
-			"type": "year",
-			"format": "default",
-			"title": "Planned Opening Year",
+			"title": "Planned Opening Date",
 			"description": "Projected opening date of project",
 			"constraints": {
 				"required": true
 			}
 		},
 		{
-			"name": "year_horizon",
-			"type": "year",
+			"name": "date_horizon",
+			"type": "date",
 			"format": "default",
 			"title": "Horizon Date",
 			"description": "Planning Horizon"
@@ -59,8 +60,26 @@
 			"name": "date_open_actual",
 			"type": "date",
 			"format": "default",
-			"title": "Actual opening Date",
+			"title": "Actual Opening Date",
 			"description": "Actual opening date of project"
+		},
+		{
+			"name": "area_type",
+			"type": "string",
+			"format": "default",
+			"title": "Area Type",
+			"description": "Geographic area type of the project.",
+			"constraints": {
+				"required": true,
+				"enum": ["rural", "suburban", "exurban", "urban", "other", "unknown"]
+			}
+		},
+		{
+			"name": "project_length_miles",
+			"type": "number",
+			"format": "default",
+			"title": "Project Length (miles)",
+			"description": "Length of the project, in miles."
 		}
 	]
 }

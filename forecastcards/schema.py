@@ -9,17 +9,18 @@ class Card_schema:
 
     master_schema_parts = {
         "poi"          : "poi-schema.json",
-        "scenario"     : "scenario-schema.json",
         "project"      : "project-schema.json",
         "observations" : "observations-schema.json",
         "forecast"     : "forecast-schema.json",
     }
 
+    # poi_id links a poi record to its observations and forecasts.
+    # project_id (assigned per-file rather than being a field within
+    # poi/observations/forecast themselves) links those three card types
+    # back to their project.
     master_relationships = [
         ("poi:poi_id", "observations:poi_id"),
-        ("observations:forecast_match_id","forecast:forecast_match_id"),
-        ("scenario:run_id","forecast:run_id"),
-        ("project:project_id","scenario:project_id"),
+        ("poi:poi_id", "forecast:poi_id"),
     ]
 
     def __init__(self, schema_dir = github_master_schema_loc, schema_parts = master_schema_parts, relationships = master_relationships, validate=True):

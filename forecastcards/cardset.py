@@ -17,7 +17,6 @@ class Cardset:
 
     github_master_schema_loc = {
                 'poi'         : "https://raw.github.com/e-lo/forecast-cards/master/spec/en/poi-schema.json",
-                "scenario"    : "https://raw.github.com/e-lo/forecast-cards/master/spec/en/scenario-schema.json",
                 "project"     : "https://raw.github.com/e-lo/forecast-cards/master/spec/en/project-schema.json",
                 "observations": "https://raw.github.com/e-lo/forecast-cards/master/spec/en/observations-schema.json",
                 "forecast"    : "https://raw.github.com/e-lo/forecast-cards/master/spec/en/forecast-schema.json",
@@ -37,7 +36,6 @@ class Cardset:
                 ):
 
         self.card_locs_by_type = {'poi'         : [],
-                          'scenario'    : [],
                           'observations': [],
                           'forecast'    : [],
                           'project'     : []}
@@ -61,7 +59,7 @@ class Cardset:
         self.failed_reports       = []
 
         # valid project requires following valid components
-        self.validity_requires    = ['project','poi','observations','scenario','forecast']
+        self.validity_requires    = ['project','poi','observations','forecast']
 
         # add initial projects
         self.add_projects(data_loc, select_projects=select_projects, exclude_projects=exclude_projects, validate=validate)
@@ -94,7 +92,7 @@ class Cardset:
 
                 # check that start time is before end time
                 if card_type in ['forecast','observations']:
-                    df = pd.read_csv(card, dtype={'obs_value': float})
+                    df = pd.read_csv(card, dtype={'observation_value': float})
                     if 'start_time' in df.columns and 'end_time' in df.columns:
                         df = df[["start_time", "end_time"]]
                         df['end_time']=df['end_time'].apply(lambda x: '23:59:59' if x in ['24:00:00','24:00'] else x)
@@ -171,7 +169,6 @@ class Cardset:
         #if verbose: print(rj)
         card_locs_by_type = {
                "poi": [],
-               "scenario": [],
                "project": [],
                "observations": [],
                "forecast": [],
@@ -214,7 +211,6 @@ class Cardset:
                 projdirs_to_import[project_path] = project_id
                 cards_by_project[project_id] = {
                     'project' : [urljoin(repo_raw,file['path'])],
-                    'scenario': [],
                     'forecast': [],
                     'observations' :[],
                     'poi':[],
@@ -238,12 +234,6 @@ class Cardset:
 
             if path_list[-1][-4:].lower()!=".csv": continue
 
-            if path_list[-1][0:8].lower()=="scenario":
-                project_path = os.path.dirname(file['path'])
-                project_id = projdirs_to_import[project_path]
-                self.file_to_project_id[urljoin(repo_raw,file['path'])] = project_id
-                cards_by_project[project_id]['scenario'].append(urljoin(repo_raw,file['path']))
-                #print("adding scenario:",file['path'])
             if path_list[-1][0:8].lower()=="forecast":
                 project_path = os.path.dirname(os.path.dirname(file['path']))
                 project_id = projdirs_to_import[project_path]
@@ -309,7 +299,6 @@ class Cardset:
             self.unvalidated_projects.append(project_id)
 
             p_card_locs = {'poi'         : glob.glob(os.path.join(project_path,'poi*.csv'),recursive=True),
-                           'scenario'    : glob.glob(os.path.join(project_path,'scenario*.csv'),recursive=True),
                            'observations': glob.glob(os.path.join(project_path,'**/observations*.csv'),recursive=True),
                            'forecast'    : glob.glob(os.path.join(project_path,'**/forecast*.csv'),recursive=True),
                            'project'     : [filepath]}

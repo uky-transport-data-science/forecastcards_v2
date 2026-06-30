@@ -8,6 +8,8 @@ from forecastcards.util import (
 
 from forecastcards.cardset import Cardset
 
+from forecastcards.data_validation import validate_data_folder
+
 from forecastcards.dataset import Dataset
 
 from forecastcards.schema import Card_schema
@@ -24,4 +26,5 @@ __all__ = [
     'Cardset',
     'Dataset',
     'Project',
+    'validate_data_folder',
 ]
