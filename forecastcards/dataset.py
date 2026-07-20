@@ -5,12 +5,12 @@ from goodtables import validate
 import forecastcards
 
 class Dataset:
-    default_recode_na_vars   = ['area_type', 'state', 'functional_class', 'project_type']
+    default_recode_na_vars   = ['area_type', 'state', 'county', 'functional_class', 'project_type']
     default_no_na_vars       = ['date_open_planned','forecast_value']
 
     default_required_vars    = default_recode_na_vars + default_no_na_vars
 
-    default_categorical_cols = ['project_size','project_decade','functional_class','project_type','area_type','state']
+    default_categorical_cols = ['project_size','project_decade','functional_class','project_type','area_type','state','county']
     default_no_scale_cols    = ['date_open_planned','forecast_value']
 
     def __init__(
