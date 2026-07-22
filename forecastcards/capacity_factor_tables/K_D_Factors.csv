@@ -1,0 +1,8 @@
+Functional Class,K Factor,D Factor,,,,,
+Freeway,0.1,0.55,,,,,
+Principal Arterial,0.12,0.6,,,,,
+Minor Arterial,0.1,0.55,,,,,
+Major Collector,0.09,0.55,,,,,
+Minor Collector,0.08,0.52,,,,,
+Local,0.08,0.5,,,,,
+Ramp,0.1,0.6,,,,,

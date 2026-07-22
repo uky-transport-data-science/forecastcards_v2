@@ -1,0 +1,5 @@
+Parameter,Symbol,Default Value
+Heavy Vehicle Factor,f_hv,0.95
+Peak Hour Factor,PHF,0.92
+Driver Population Factor,f_p,0.95
+Grade Adjustment Factor,f_g,1

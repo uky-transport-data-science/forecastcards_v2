@@ -1,0 +1,8 @@
+Facility Type,Base Capacity (veh/hr/lane)
+Freeway,"2,400"
+Principal Arterial,900
+Minor Arterial,800
+Major Collector,700
+Minor Collector,600
+Local Road,400
+Ramp,"1,800"
