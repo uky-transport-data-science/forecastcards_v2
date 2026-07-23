@@ -27,7 +27,10 @@
 			"type": "string",
 			"format": "default",
 			"title": "County",
-			"description": "County in which the project is located."
+			"description": "County in which the project is located.",
+			"constraints": {
+				"required": true
+			}
 		},
 		{
 			"name": "project_type",
@@ -62,6 +65,13 @@
 			"format": "default",
 			"title": "Horizon Date",
 			"description": "Planning Horizon"
+		},
+				{
+			"name": "construction_start_date",
+			"type": "date",
+			"format": "default",
+			"title": "Construction Start Date",
+			"description": "Date construction began on the project"
 		},
 		{
 			"name": "date_open_actual",

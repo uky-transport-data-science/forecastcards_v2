@@ -62,7 +62,7 @@ class Dataset:
         project_df = pd.concat(
             [pd.read_csv(
                 f,
-                parse_dates=['date_open_planned','date_horizon','date_open_actual'],
+                parse_dates=['date_open_planned','date_horizon','construction_start_date','date_open_actual'],
                 ) for f in card_locs_by_type["project"]
             ],
             ignore_index=True,
