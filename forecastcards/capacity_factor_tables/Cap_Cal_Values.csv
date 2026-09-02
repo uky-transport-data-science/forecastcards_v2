@@ -3,3 +3,17 @@ Heavy Vehicle Factor,f_hv,0.95
 Peak Hour Factor,PHF,0.92
 Driver Population Factor,f_p,0.95
 Grade Adjustment Factor,f_g,1
+Lanemiles Elasticity,BLM,0.45
+Lane Count Effect,BL,0.35
+Left?Turn Lane Effect,BLT,0.1
+Right?Turn Lane Effect,BRT,0.06
+Lane Width Effect,BW,0.05
+Managed Lane Effect,BE,0.15
+Shoulder Widening Effect,BS,0.05
+Functional Class Effect,BF,0.1
+Speed Limit Effect,BSL,0.05
+Signals per Mile Effect,BSIG,-0.1
+Area Type Effect,BAT,-0.1
+Local Demand Change,BA,1
+Population Growth,BP,0.25
+Income Growth,BY,0.25
